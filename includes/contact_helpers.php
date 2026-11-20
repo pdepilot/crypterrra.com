@@ -2,38 +2,40 @@
 declare(strict_types=1);
 
 /**
- * Shared contact submissions storage (crypterra_admin DB — same as Admin panel).
+ * Shared contact submissions storage.
+ * Uses the project-root db-config.php ($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME).
  */
 
 function contact_load_db_config(): array {
-  $DB_HOST = 'localhost';
-  $DB_USER = 'root';
-  $DB_PASS = '';
-  $DB_NAME = 'crypterra_admin';
-  $adminConfig = dirname(__DIR__) . '/Admin/db-config.php';
-  if (is_file($adminConfig)) {
-    require $adminConfig;
+  $configPath = dirname(__DIR__) . '/db-config.php';
+  if (!is_file($configPath)) {
+    throw new RuntimeException('Database configuration is missing.');
   }
+
+  $DB_HOST = null;
+  $DB_USER = null;
+  $DB_PASS = null;
+  $DB_NAME = null;
+  require $configPath;
+
+  $hostOk = is_string($DB_HOST) && $DB_HOST !== '' && preg_match('/^[a-zA-Z0-9._:-]+$/', $DB_HOST) === 1;
+  $userOk = is_string($DB_USER) && $DB_USER !== '' && preg_match('/^[a-zA-Z0-9._-]+$/', $DB_USER) === 1;
+  $nameOk = is_string($DB_NAME) && preg_match('/^[a-zA-Z0-9_]+$/', $DB_NAME) === 1;
+  if (!$hostOk || !$userOk || !is_string($DB_PASS) || !$nameOk) {
+    throw new RuntimeException('Database configuration is invalid.');
+  }
+
   return [$DB_HOST, $DB_USER, $DB_PASS, $DB_NAME];
 }
 
 function contact_db_connect(): mysqli {
   [$host, $user, $pass, $name] = contact_load_db_config();
   mysqli_report(MYSQLI_REPORT_OFF);
-  $db = @new mysqli($host, $user, $pass);
+  $db = @new mysqli($host, $user, $pass, $name);
   if ($db->connect_errno) {
     throw new RuntimeException('Database connection failed.');
   }
   $db->set_charset('utf8mb4');
-  if ($name !== '' && preg_match('/^[a-zA-Z0-9_]+$/', $name)) {
-    @$db->query(
-      'CREATE DATABASE IF NOT EXISTS `' . $name . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
-    );
-    if (!$db->select_db($name)) {
-      $db->close();
-      throw new RuntimeException('Cannot select database.');
-    }
-  }
   return $db;
 }
 
