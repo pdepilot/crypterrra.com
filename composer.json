@@ -1,0 +1,9 @@
+{
+  "name": "investmentwebsite/crypterra",
+  "description": "Crypterra investment website",
+  "type": "project",
+  "require": {
+    "maxmind-db/reader": "*"
+  }
+}
+

@@ -1,0 +1,9 @@
+# Local database credentials
+/db-config.php
+/Admin/db-config.php
+
+# Uploaded identity documents and user files
+/uploads/
+
+# Runtime wallet session data
+/data/wallet_connections.json

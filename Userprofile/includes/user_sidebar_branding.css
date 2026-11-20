@@ -1,0 +1,195 @@
+/**
+ * Shared Crypterra sidebar + header branding (aligned with userprofile.php).
+ * Load after page styles so these rules apply consistently.
+ */
+
+.dashboard .sidebar .logo-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: #fff !important;
+  box-shadow: 0 0 30px var(--primary-glow);
+}
+
+.dashboard .sidebar-header h3,
+.dashboard .sidebar-header h3 span {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff, var(--primary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+
+body.light .dashboard .sidebar-header h3,
+body.light .dashboard .sidebar-header h3 span {
+  background: linear-gradient(135deg, var(--text), var(--primary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.dashboard .sidebar-user .user-avatar-large {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--primary-color), var(--primary-dark)) !important;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 2px solid var(--primary-color);
+  box-sizing: border-box;
+}
+
+.dashboard .top-bar .user-avatar {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--primary-color), var(--primary-dark)) !important;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 18px;
+  border: 2px solid var(--primary-color);
+  box-sizing: border-box;
+  box-shadow: 0 4px 8px var(--primary-glow);
+}
+
+/* Top bar: keep user block from blowing out width (flex min-width fix) */
+.dashboard .top-bar .header-left {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.dashboard .top-bar .header-right {
+  flex-shrink: 0;
+}
+
+.dashboard .top-bar .icon-button {
+  position: relative;
+}
+
+.dashboard .top-bar .icon-button .notification-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  background: var(--danger-color, #ef4444);
+  color: #fff;
+  border-radius: 9px;
+  border: 2px solid var(--bg, #0a1525);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+body.light .dashboard .top-bar .icon-button .notification-badge {
+  border-color: var(--surface, #fff);
+}
+
+.dashboard .top-bar .user-profile {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.user-profile-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  line-height: 1.25;
+  min-width: 0;
+  /* Avoid 100vw (scrollbar + subpixel horizontal scroll on mobile) */
+  max-width: 100%;
+}
+
+.dashboard .top-bar .user-name {
+  margin: 0;
+}
+
+.user-wallet-short {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 500;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard .top-bar .user-profile-meta .user-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Wallet ID / short id: hide only in the top navbar (sidebar & body keep their own blocks) */
+.dashboard .main-content > .top-bar .user-wallet-short {
+  display: none !important;
+}
+
+/* Keep bell + theme on one row on desktop (pages that set flex-wrap: wrap) */
+@media (min-width: 769px) {
+  .dashboard .main-content > .top-bar {
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+}
+
+/* Stack above main-column content (do not set position — pages use sticky or fixed) */
+.dashboard .main-content > .top-bar {
+  z-index: 120;
+}
+
+/*
+ * Fixed top bars that used full viewport width were drawn under the sidebar (lower z-index),
+ * hiding the user block on the left. Anchor the bar to the main column:
+ */
+.dashboard .main-content > .top-bar.top-bar--main {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 280px;
+  width: auto;
+  max-width: none;
+  box-sizing: border-box;
+  z-index: 200;
+  transition: left 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.dashboard .sidebar.collapsed ~ .main-content > .top-bar.top-bar--main {
+  left: 80px;
+}
+
+@media (max-width: 768px) {
+  .dashboard .main-content > .top-bar.top-bar--main {
+    left: 0 !important;
+  }
+}
+
